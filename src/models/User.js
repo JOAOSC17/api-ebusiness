@@ -37,4 +37,26 @@ User.getAll = (result) => {
   });
 };
 
+User.updateById = (id, user, result) => {
+  sql.query(
+    "UPDATE users SET name = ?, email = ?, password_hash = ?, is_admin = ? WHERE id = ?",
+    [user.name, user.email, user.password_hash, user.is_admin, id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated user: ", { id: id, ...user });
+      result(null, { id: id, ...user });
+    }
+  );
+};
+
 module.exports = User;
