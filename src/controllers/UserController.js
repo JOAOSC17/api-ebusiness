@@ -59,3 +59,18 @@ exports.update = (req, res) => {
     }
   );
 };
+exports.findOne = (req, res) => {
+  User.findById(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).json({
+          message: `Not found User with id ${req.params.id}.`
+        });
+      } else {
+        res.status(500).json({
+          message: "Error retrieving User with id " + req.params.id
+        });
+      }
+    } else res.json(data);
+  });
+};
