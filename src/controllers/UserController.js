@@ -9,3 +9,26 @@ exports.findAll = (req, res) => {
         else res.json(data);
       }) 
 }
+exports.create = (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+
+  const newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password_hash: req.body.password_hash,
+    is_admin:req.body.is_admin
+  });
+
+  User.create(newUser, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the User."
+      });
+    else res.json(data);
+  });
+};
