@@ -76,4 +76,23 @@ User.findById = (id, result) => {
     result({ kind: "not_found" }, null);
   });
 };
+User.remove = (id, result) => {
+  sql.query("DELETE FROM users WHERE id = ?", id, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      // not found user with the id
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("deleted user with id: ", id);
+    result(null, res);
+  });
+};
+
 module.exports = User;
