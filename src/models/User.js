@@ -94,5 +94,23 @@ User.remove = (id, result) => {
     result(null, res);
   });
 };
+User.findOneEmail= (email, result) => {
+  sql.query(`SELECT * FROM users WHERE email= "${email}"`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found users: ", res[0]);
+      result(null, res[0]);
+      return res[0];
+    }
+
+    // not found Tutorial with the id
+    result({ kind: "not_found" }, null);
+  });
+};
 
 module.exports = User;
