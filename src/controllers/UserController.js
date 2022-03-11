@@ -1,6 +1,7 @@
 const User = require("../models/User")
 const bcryptjs =require('bcryptjs')
 exports.findAll = (req, res) => {
+  console.log(req.userId, req.userEmail, req.userIsAdmin)
     User.getAll((err, data) => {
         if (err)
           res.status(500).json({
