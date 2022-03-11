@@ -1,6 +1,6 @@
 const jwt =require('jsonwebtoken')
 require('dotenv').config()
-exports.verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization) {
@@ -20,3 +20,19 @@ exports.verifyToken = (req, res, next) => {
       return res.status(403).json('Token is not valid!');
     }
 }
+const verifyTokenAndAuthorization = (req, res, next) => {
+    try {
+      const { id } = req.params;
+      verifyToken(req, res, () => {
+        if (req.userId === Number(id) || req.userIsAdmin) {
+          return next();
+        }
+        return res.status(403).json({
+          errors: ['You are not alowed to do that!'],
+        });
+      });
+    } catch (e) {
+      console.log(e)
+    }
+}
+module.exports = {verifyToken, verifyTokenAndAuthorization}
