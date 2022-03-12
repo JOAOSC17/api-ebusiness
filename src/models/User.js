@@ -5,11 +5,10 @@ const User = function(user) {
   if(typeof user.name !=='string' || !user.name ) throw ('Só é permitido string no campo de nome');
   if(typeof user.email !=='string' || !user.email) throw ('Só é permitido string no campo de email');
   if(typeof user.password_hash !=='string' || !user.password_hash) throw ('Só é permitido string no campo senha');
-  if(typeof user.is_admin !=='boolean') throw ('Só é permitido boolean no campo de isAdmin');
   this.name = user.name ;
   this.email = user.email;
   this.password_hash = user.password_hash;
-  this.is_admin = user.is_admin;
+  this.is_admin = Boolean(user.is_admin);
 };
 User.create = (newUser, result) => {
   sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
@@ -92,6 +91,24 @@ User.remove = (id, result) => {
 
     console.log("deleted user with id: ", id);
     result(null, res);
+  });
+};
+User.findOneEmail= (email, result) => {
+  sql.query(`SELECT * FROM users WHERE email= "${email}"`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found users: ", res[0]);
+      result(null, res[0]);
+      return res[0];
+    }
+
+    // not found Tutorial with the id
+    result({ kind: "not_found" }, null);
   });
 };
 

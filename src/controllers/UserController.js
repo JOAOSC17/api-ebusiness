@@ -1,5 +1,7 @@
 const User = require("../models/User")
+const bcryptjs =require('bcryptjs')
 exports.findAll = (req, res) => {
+  console.log(req.userId, req.userEmail, req.userIsAdmin)
     User.getAll((err, data) => {
         if (err)
           res.status(500).json({
@@ -9,7 +11,7 @@ exports.findAll = (req, res) => {
         else res.json(data);
       }) 
 }
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   if (!req.body) {
     res.status(400).json({
       message: "Content can not be empty!"
@@ -19,7 +21,7 @@ exports.create = (req, res) => {
   const newUser = new User({
     name: req.body.name,
     email: req.body.email,
-    password_hash: req.body.password_hash,
+    password_hash: await bcryptjs.hash(req.body.password, 8),
     is_admin:req.body.is_admin
   });
 
