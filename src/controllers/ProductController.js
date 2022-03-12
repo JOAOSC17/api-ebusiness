@@ -9,3 +9,25 @@ exports.findAll = (req, res) => {
         else res.json(data);
       }) 
 }
+exports.create = (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+    const { title, description, price } = req.body
+    const newProduct = new Product({ 
+      title, 
+      description, 
+      price 
+    });
+
+    Product.create(newProduct, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Product."
+      });
+    else res.json(data);
+  });
+};
