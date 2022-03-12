@@ -51,4 +51,25 @@ Product.findById = (id, result) => {
     result({ kind: "not_found" }, null);
   });
 };
+Product.updateById = (id, product, result) => {
+    sql.query(
+      "UPDATE products SET title = ?, description = ?, price = ? WHERE id = ?",
+      [product.title, product.description, product.price, id],
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err);
+          result(null, err);
+          return;
+        }
+  
+        if (res.affectedRows == 0) {
+          result({ kind: "not_found" }, null);
+          return;
+        }
+  
+        console.log("updated product: ", { id: id, ...product });
+        result(null, { id: id, ...product });
+      }
+    );
+  };
 module.exports = Product

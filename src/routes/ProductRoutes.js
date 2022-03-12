@@ -4,4 +4,5 @@ const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = requir
 route.get("/", ProductController.findAll)
 route.get("/:id", ProductController.findOne)
 route.post("/", ProductController.create)
+route.put("/:id", ProductController.update)
 module.exports=route
