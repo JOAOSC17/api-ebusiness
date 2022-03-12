@@ -35,4 +35,20 @@ const verifyTokenAndAuthorization = (req, res, next) => {
       console.log(e)
     }
 }
-module.exports = {verifyToken, verifyTokenAndAuthorization}
+const verifyTokenAndAdmin = (req, res, next) => {
+  try {
+    verifyToken(req, res, () => {
+      if (req.userIsAdmin) {
+        return next();
+      }
+      return res.status(403).json({
+        errors: ['You are not alowed to do that!'],
+      });
+    });
+  } catch (e) {
+    return res.status(400).json({
+      errors: e.errors.map((err) => err.message),
+    });
+  }
+};
+module.exports = {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin}
