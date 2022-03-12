@@ -1,5 +1,6 @@
 const express = require("express")
 const UserRoutes = require("./routes/UserRoutes")
+const ProductRoutes = require("./routes/ProductRoutes")
 const LoginRoutes = require("./routes/LoginRoutes")
 const connection  = require("./db")
 const app = express()
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/users", UserRoutes)
 app.use("/login", LoginRoutes)
+app.use("/products", ProductRoutes)
 const PORT = process.env.PORT || 9001
 app.listen(PORT, ()=>{
     console.log(`Backend is Running http://localhost:${PORT}/`);
